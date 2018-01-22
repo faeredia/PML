@@ -1,8 +1,10 @@
 import numpy as np
+from matplotlib.colors import ListedColormap
+import matplotlib.pyplot as plt
 
 class Perceptron(object):
 	"""Perceptron Classifier
-	
+
 	Parameters
 	-----------
 	eta : float
@@ -63,3 +65,46 @@ class Perceptron(object):
 	def predict(self, X):
 		"""Return class label after unit step"""
 		return np.where(self.net_input(X) >= 0.0, 1, -1)
+
+
+def plot_decision_regions(X, y, classifier, resolution=0.02, ax=None):
+	"""Function to quickly plot decision regions that Perceptron has made
+	Useful only for two features x in X
+
+	Returns
+	--------
+	A plot
+	"""
+
+	# setup marker generator and colormap
+	markers = ('s', 'x', 'o', '^', 'v')
+	colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
+	cmap = ListedColormap(colors[:len(np.unique(y))])
+
+	#plot the decision surface (for 2 features x in X)
+	x1_min, x1_max = X[:, 0].min() -1, X[:, 0].max()+1
+	x2_min, x2_max = X[:, 1].min() -1, X[:, 1].max()+1
+	xx1, xx2 = np.meshgrid(
+					np.arange(x1_min, x1_max, resolution),
+					np.arange(x2_min, x2_max, resolution))
+	Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
+	Z = Z.reshape(xx1.shape)
+
+	if ax == None:
+		fig = plt.figure()
+		ax = fig.add_subplot(111)
+	ax.contourf(xx1, xx2, Z, alpha=0.3, cmap=cmap)
+	ax.set_xlim(xx1.min(), xx1.max())
+	ax.set_ylim(xx2.min(), xx2.max())
+
+	for idx, cl in enumerate(np.unique(y)):
+		ax.scatter(x=X[y==cl, 0],
+				   y=X[y==cl, 1],
+				   alpha=0.8,
+				   c=colors[idx],
+				   marker=markers[idx],
+				   label=cl,
+				   edgecolor='black')
+	
+	return ax
+
