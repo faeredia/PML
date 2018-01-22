@@ -31,6 +31,6 @@ ax[1].set_xlabel('Epochs')
 ax[1].set_ylabel('Number of updates')
 
 fig.set_dpi(1200)
-fig.savefig("graph_eg1.svg")
-print("Saved the plot to 'graph_eg1.svg'")
+fig.savefig("images/graph_eg1.svg")
+print("Saved the plot to 'images/graph_eg1.svg'")
 plt.show()
